@@ -16,8 +16,12 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get('bucket')
-  async getBuckets() {
-    return await this.mediaService.getBucketList();
+  async getBucketObjects() {
+    try {
+      return await this.mediaService.getObjectList();
+    } catch (error) {
+      throw new HttpException(error, error.status);
+    }
   }
 
   @Post('upload')
@@ -29,7 +33,7 @@ export class MediaController {
     try {
       return await this.mediaService.uploadBuffer(file);
     } catch (error) {
-      return error;
+      throw new HttpException(error, error.status);
     }
   }
 }

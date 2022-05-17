@@ -7,6 +7,18 @@ import * as crypto from 'crypto';
 export class MinioClientService {
   constructor(private readonly minio: MinioService) {
     this.logger = new Logger('MinioService');
+
+    // THIS IS THE POLICY
+    /*
+              this.client.setBucketPolicy(
+                process.env.MINIO_BUCKET_NAME,
+                JSON.stringify(minioPolicy),
+                function (err) {
+                  if (err) throw err;
+                  console.log('Bucket policy set');
+                },
+              );
+            */
   }
 
   private readonly logger: Logger;
@@ -48,7 +60,7 @@ export class MinioClientService {
       file.buffer,
       undefined,
       metaData,
-      (err, res) => {
+      (err) => {
         if (err) {
           this.logger.error(err);
           throw new HttpException(
@@ -70,7 +82,7 @@ export class MinioClientService {
     this.client.removeObject(bucketName, objetName, (err) => {
       if (err)
         throw new HttpException(
-          'An error occured when deleting!',
+          'An error occurred when deleting!',
           HttpStatus.BAD_REQUEST,
         );
     });
